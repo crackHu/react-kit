@@ -9,9 +9,7 @@ export const QUESTION = 'QUESTION'
 // Actions
 // ------------------------------------
 export const queryQuestion = () => {
-  console.log('queryQuestion^^^^^^')
   return (dispatch, getState) => {
-    console.log('queryQuestion dispatch^^^^^^', fetch)
     /*return fetch('/users.json')
       .then(response => response.json())
       .then(json => {
@@ -25,7 +23,19 @@ export const queryQuestion = () => {
       }).catch(e => {
         console.log('parsing failed', e)
       })*/
-      get('/users.json')
+      const correct_cb = (data) => {
+      }
+      const failure_cb = (data) => {
+      }
+      const data = get('http://localhost:8080/rmMgr/admin/rm/getAllQuestionByFirm', null, correct_cb, failure_cb)
+        .then(data => 
+          dispatch({
+            type: QUESTION,
+            data
+          })
+        )
+
+      console.log('request:', data)
   }
 }
 

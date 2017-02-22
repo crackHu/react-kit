@@ -13,28 +13,41 @@ const post = (url, param, correct_cb, failure_cb) => {
   return get(url, options, correct_cb, failure_cb)
 }
 
-const get = (url, options = null, correct_cb, failure_cb) => {
-  fetch(url, options)
-    .then(response => response.json())
-    .then(response => {
-      requestFilter(response, correct_cb, failure_cb)
-    }).catch(e => {
-      logger(e, 'error')
-    })
+const get = async (url, options = null, correct_cb, failure_cb) => {
+  // fetch(url, options)
+  //   .then(response => response.json())
+  //   .then(response => {
+  //     return requestFilter(response, correct_cb, failure_cb)
+  //   }).catch(e => {
+  //     logger(e, 'error')
+  //   })
+  try {
+    let response = await fetch(url, options)
+    let data = await response.json()
+    console.log('get', data)
+    return requestFilter(data, correct_cb, failure_cb)
+  } catch (e) {
+    logger(e, 'error')
+  }
 }
 
 const requestFilter = (response, correct_cb, failure_cb) => {
-  console.debug('requestFilter =>', data)
-  let { code, message } = response
+  console.debug('requestFilter =>', response)
+
+  let { code, message, data, status} = response
   if (code) {
     if (code === '1001') {
-      let data = response.data
       typeof correct_cb === 'function' ? correct_cb(data) : null
       return data
     } else {
-      typeof failure_cb === 'function' ? failure_cb() : null
+      typeof failure_cb === 'function' ? failure_cb(data) : null
       logger(response, 'warn')
+      return
     }
+  }
+  if (status) {
+    typeof failure_cb === 'function' ? failure_cb(data) : null
+    logger(response, 'error')
   }
 }
 
@@ -43,9 +56,9 @@ const logger = (object, type = 'debug', alerted = false) => {
     alert(alerted)
   }
   let obj = JSON.stringify(object)
-  console[type](object, 'aaaaaaaaaaa', Object.keys(object))
+  console[type]('logger =>', object, obj)
   let notice = `${new Date().format(DATE_PATTERN)} [${type}] [${alerted}]`
-  localStorage[notice] = obj
+  localStorage[notice] =  `object:${object}; parse:${obj}`
 }
 
 const getUrlParam = (name) => {
