@@ -1,18 +1,24 @@
 // We only need to import the modules necessary for initial render
-import CoreLayout from '../layouts/CoreLayout'
+import AntdLayout from '../layouts/AntdLayout'
 import Home from './Home'
-import CounterRoute from './Counter'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
 
 export const createRoutes = (store) => ({
   path        : '/',
-  component   : CoreLayout,
+  component   : AntdLayout,
   indexRoute  : Home,
-  childRoutes : [
-    CounterRoute(store)
-  ]
+  getChildRoutes: (location, cb) => {
+    require.ensure([], (require) => {
+      cb(null, [
+        require('./Counter').default(store),
+        require('./Question').default(store)
+      ])
+    })
+  },
+  onEnter,
+  onChange,
 })
 
 /*  Note: childRoutes can be chunked or otherwise loaded programmatically
@@ -32,5 +38,17 @@ export const createRoutes = (store) => ({
     inside the route `getComponent` function, since it is only invoked
     when the route exists and matches.
 */
+
+const onEnter = (nextState, replace, callback) => {
+  console.log('aaaaaaaaaaaaaaaaaa')
+  NProgress.start()
+  callback()
+}
+
+const onChange = (prevState, nextState, replace, callback) => {
+  console.log('bbbbbbbbbbbbbbbbbbbbbb', NProgress)
+  NProgress.start()
+  callback()
+}
 
 export default createRoutes
