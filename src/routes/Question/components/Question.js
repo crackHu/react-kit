@@ -45,7 +45,7 @@ export class Question extends React.Component {
 	}
 
 	render() {
-		let dataSource = this.props.question.content
+		let dataSource = this.props.question.content || []
 
 		return (
 			<div style={{ margin: '0 auto' }} >

@@ -1,10 +1,20 @@
 const CrudTable = {
 	columns: [{
 		width: 100,
+		title: 'id',
+		dataIndex: 'id',
+		key: 'id',
+	}, {
+		title: 'status',
+		dataIndex: 'status',
+		key: 'status',
+	}, {
+		width: 200,
 		title: 'prjName',
 		dataIndex: 'prjName',
 		key: 'prjName',
 	}, {
+		width: 200,
 		title: 'subject',
 		dataIndex: 'subject',
 		key: 'subject',
@@ -24,10 +34,6 @@ const CrudTable = {
 		title: 'incha',
 		dataIndex: 'incha',
 		key: 'incha',
-	}, {
-		title: 'status',
-		dataIndex: 'status',
-		key: 'status',
 	}, {
 		title: 'scheme',
 		dataIndex: 'scheme',

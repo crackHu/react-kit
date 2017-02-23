@@ -33,9 +33,14 @@ export class CrudTable extends React.Component {
         const {dataSource} = this.props
         const config = this.props.config.CrudTable
         const {columns} = config
-        
+
         return (
-            <Table dataSource={dataSource} columns={columns} />
+            <Table
+                rowKey={record => record.id}
+                dataSource={dataSource}
+                columns={columns}
+                expandedRowRender={record => <p>{'1111111111'}</p>}
+            />
         )
     }
 }
