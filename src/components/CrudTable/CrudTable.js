@@ -6,7 +6,8 @@ export class CrudTable extends React.Component {
     static propTypes = {
         dataSource: React.PropTypes.array.isRequired,
         config: React.PropTypes.object.isRequired,
-        searchOptions: React.PropTypes.node,
+        children: React.PropTypes.element,
+
         create: React.PropTypes.func,
         retrieve: React.PropTypes.func,
         update: React.PropTypes.func,
@@ -33,14 +34,31 @@ export class CrudTable extends React.Component {
         const {dataSource} = this.props
         const config = this.props.config.CrudTable
         const {columns} = config
+        const pagination = {
+            total: dataSource.length,
+            showSizeChanger: true,
+            showQuickJumper: true,
+            showTotal: (total, range) => `共 ${total} 条 （${range[0]}-${range[1]}）`
+        };
 
         return (
+          <div>
+            {this.props.children}
             <Table
                 rowKey={record => record.id}
                 dataSource={dataSource}
                 columns={columns}
-                expandedRowRender={record => <p>{'1111111111'}</p>}
+                pagination={pagination}
+                expandedRowRender={record => {
+                    return(
+                      <div>
+                        <b>描述：</b><p>{record.scheme}</p>
+                        <b>开发实施方案：</b><p>{record.description}</p>
+                      </div>
+                    )
+                }}
             />
+          </div>
         )
     }
 }

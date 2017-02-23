@@ -66,11 +66,11 @@ export class AntdLayout extends React.Component {
               onClick={this.toggle}
             />
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
+          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff' }}>
             {this.props.children}
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            Ant Design ©2016 Created by Ant UED
+            DingMedic ©2017 rmMgr
           </Footer>
         </Layout>
       </Layout>

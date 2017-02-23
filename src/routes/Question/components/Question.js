@@ -2,6 +2,7 @@ import React from 'react'
 import { Table, Icon } from 'antd';
 import CrudTable from 'components/CrudTable'
 import CrudTableConfig from '../CrudTableConfig'
+import AdvancedSearchForm from 'components/AdvancedSearchForm'
 
 export class Question extends React.Component {
 
@@ -46,13 +47,14 @@ export class Question extends React.Component {
 
 	render() {
 		let dataSource = this.props.question.content || []
-
 		return (
 			<div style={{ margin: '0 auto' }} >
 				<CrudTable
 					dataSource={dataSource}
 					config={CrudTableConfig}
-				/>
+				>
+					<AdvancedSearchForm />
+				</CrudTable>
       </div>
 		)
 	}

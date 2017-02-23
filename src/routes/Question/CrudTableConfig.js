@@ -1,47 +1,32 @@
 const CrudTable = {
 	columns: [{
-		width: 100,
-		title: 'id',
+		title: '#',
 		dataIndex: 'id',
 		key: 'id',
 	}, {
-		title: 'status',
+		title: '状态',
 		dataIndex: 'status',
 		key: 'status',
 	}, {
-		width: 200,
-		title: 'prjName',
+		title: '项目',
 		dataIndex: 'prjName',
 		key: 'prjName',
 	}, {
-		width: 200,
-		title: 'subject',
+		title: '主题',
 		dataIndex: 'subject',
 		key: 'subject',
 	}, {
-		title: 'description',
-		dataIndex: 'description',
-		key: 'description',
-	}, {
-		title: 'due_date',
+		title: '计划完成时间',
 		dataIndex: 'due_date',
 		key: 'due_date',
 	}, {
-		title: 'asign',
-		dataIndex: 'asign',
-		key: 'asign',
-	}, {
-		title: 'incha',
+		title: '负责人',
 		dataIndex: 'incha',
 		key: 'incha',
-	}, {
-		title: 'scheme',
-		dataIndex: 'scheme',
-		key: 'scheme',
-	}, {
-		title: 'schemelength',
-		dataIndex: 'schemelength',
-		key: 'schemelength',
+	},  {
+		title: '指派给',
+		dataIndex: 'asign',
+		key: 'asign',
 	}]
 }
 
