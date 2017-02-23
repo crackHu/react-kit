@@ -1,70 +1,61 @@
 import React from 'react'
 import { Table, Icon } from 'antd';
+import CrudTable from 'components/CrudTable'
+import CrudTableConfig from '../CrudTableConfig'
 
 export class Question extends React.Component {
 
   static propTypes = {
     queryQuestion: React.PropTypes.func.isRequired
   }
+
+  state = {
+  	category: this.props.params.category
+  }
+
   componentDidMount = () => {
-  	console.log('Question componentDidMount')
-    this.props.queryQuestion()
+  	console.log('Question.componentDidMount', this.props, this.state)
+
+  	this.queryQuestion()
   }
 
-  render () {
+  componentWillReceiveProps = (nextProps) => {
+		console.log('Question.componentWillReceiveProps', this.state.category, nextProps.params)
 
-		const columns = [{
-			title: 'Name',
-			dataIndex: 'name',
-			key: 'name',
-			render: text => <a href="#">{text}</a>,
-		}, {
-			title: 'Age',
-			dataIndex: 'age',
-			key: 'age',
-		}, {
-			title: 'Address',
-			dataIndex: 'address',
-			key: 'address',
-		}, {
-			title: 'Action',
-			key: 'action',
-			render: (text, record) => (
-				<span>
-	      <a href="#">Action 一 {record.name}</a>
-	      <span className="ant-divider" />
-	      <a href="#">Delete</a>
-	      <span className="ant-divider" />
-	      <a href="#" className="ant-dropdown-link">
-	        More actions <Icon type="down" />
-	      </a>
-	    </span>
-			),
-		}];
+		let category_prev = this.state.category
+		let category_after = nextProps.params.category
+		if (category_prev && category_prev !== category_after) {
+			this.setState({
+				category: category_after
+			})
+  		this.queryQuestion(category_after)
+		}
+  }
 
-		const data = [{
-			key: '1',
-			name: 'John Brown',
-			age: 32,
-			address: 'New York No. 1 Lake Park',
-		}, {
-			key: '2',
-			name: 'Jim Green',
-			age: 42,
-			address: 'London No. 1 Lake Park',
-		}, {
-			key: '3',
-			name: 'Joe Black',
-			age: 32,
-			address: 'Sidney No. 1 Lake Park',
-		}];
+	componentWillUpdate = (nextProps, nextState) => {
+		console.log('Question.componentWillUpdate', nextProps, nextState)
+	}
 
-    return (
-      <div style={{ margin: '0 auto' }} >
-        <Table columns={columns} dataSource={data} />
+	componentDidUpdate = (prevProps, prevState) => {
+		console.log("Question.componentDidUpdate", this.props, prevProps, prevState)
+	}
+
+	queryQuestion = (category = this.state.category) => {
+    this.props.queryQuestion(category)
+	}
+
+	render() {
+		let dataSource = this.props.question.content
+
+		return (
+			<div style={{ margin: '0 auto' }} >
+				<CrudTable
+					dataSource={dataSource}
+					config={CrudTableConfig}
+				/>
       </div>
-    )
-  }
+		)
+	}
 }
 
 export default Question

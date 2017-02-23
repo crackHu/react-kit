@@ -8,34 +8,23 @@ export const QUESTION = 'QUESTION'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const queryQuestion = () => {
+export const queryQuestion = (category) => {
   return (dispatch, getState) => {
-    /*return fetch('/users.json')
-      .then(response => response.json())
-      .then(json => {
-        console.log('parsed json', json)
 
-        dispatch({
-          type: QUESTION,
-          data: json
-        })
-
-      }).catch(e => {
-        console.log('parsing failed', e)
-      })*/
-      const correct_cb = (data) => {
-      }
-      const failure_cb = (data) => {
-      }
-      const data = get('http://localhost:8080/rmMgr/admin/rm/getAllQuestionByFirm', null, correct_cb, failure_cb)
-        .then(data => 
-          dispatch({
-            type: QUESTION,
-            data
-          })
-        )
-
-      console.log('request:', data)
+    const correct_cb = (data) => {
+      console.log('correct_cb', category, data)
+      dispatch({
+        type: QUESTION,
+        data: {
+          ...data,
+          category
+        }
+      })
+    }
+    const failure_cb = (data) => {
+      console.log('failure_cb', data)
+    }
+    get('http://localhost:8080/rmMgr/admin/rm/getAllQuestionByFirm?category=' + category, null, correct_cb, failure_cb)
   }
 }
 

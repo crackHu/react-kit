@@ -1,16 +1,17 @@
 import 'whatwg-fetch'
 import { DATE_PATTERN } from 'config'
 
-const post = (url, param, correct_cb, failure_cb) => {
-  options = {
+const post = async (url, param = null, correct_cb, failure_cb) => {
+  // JSON.stringify(param)
+  let options = {
     method: "POST",
+    credentials: "include",
     body: JSON.stringify(param),
     headers: {
       "Content-Type": "application/json"
-    },
-    credentials: "same-origin" // "include"
+    }
   }
-  return get(url, options, correct_cb, failure_cb)
+  return await get(url, options, correct_cb, failure_cb)
 }
 
 const get = async (url, options = null, correct_cb, failure_cb) => {
@@ -41,7 +42,7 @@ const requestFilter = (response, correct_cb, failure_cb) => {
       return data
     } else {
       typeof failure_cb === 'function' ? failure_cb(data) : null
-      logger(response, 'warn')
+      logger(response, message)
       return
     }
   }
