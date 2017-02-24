@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { browserHistory, Router } from 'react-router'
 import { Provider } from 'react-redux'
 
+import 'whatwg-fetch'
 // Global css
 import 'nprogress/nprogress.css'
 

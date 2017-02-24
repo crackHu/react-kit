@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Row, Col, Input, Button, Icon } from 'antd';
 const FormItem = Form.Item;
+import './AdvancedSearchForm.scss'
 
 export class AdvancedSearchForm extends React.Component {
   state = {
@@ -47,25 +48,27 @@ export class AdvancedSearchForm extends React.Component {
     const expand = this.state.expand;
     const shownCount = expand ? children.length : 3;
     return (
-      <Form
-        className="ant-advanced-search-form"
-        onSubmit={this.handleSearch}
-      >
-        <Row gutter={40}>
-          {children.slice(0, shownCount)}
-        </Row>
-        <Row>
-          <Col span={24} style={{ textAlign: 'right', marginBottom: 8 }}>
-            <Button type="primary" htmlType="submit">Search</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-              Clear
-            </Button>
-            <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
-              Collapse <Icon type={expand ? 'up' : 'down'} />
-            </a>
-          </Col>
-        </Row>
-      </Form>
+      <div id="components-form-demo-advanced-search">
+        <Form
+          className="ant-advanced-search-form"
+          onSubmit={this.handleSearch}
+        >
+          <Row gutter={40}>
+            {children.slice(0, shownCount)}
+          </Row>
+          <Row>
+            <Col span={24} style={{ textAlign: 'right' }}>
+              <Button type="primary" htmlType="submit">Search</Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
+                Clear
+              </Button>
+              <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
+                Collapse <Icon type={expand ? 'up' : 'down'} />
+              </a>
+            </Col>
+          </Row>
+        </Form>
+      </div>
     );
   }
 }

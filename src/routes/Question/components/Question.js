@@ -3,6 +3,7 @@ import { Table, Icon } from 'antd';
 import CrudTable from 'components/CrudTable'
 import CrudTableConfig from '../CrudTableConfig'
 import AdvancedSearchForm from 'components/AdvancedSearchForm'
+import { DEFAULT_PAGING_SORT } from 'config'
 
 export class Question extends React.Component {
 
@@ -41,16 +42,16 @@ export class Question extends React.Component {
 		console.log("Question.componentDidUpdate", this.props, prevProps, prevState)
 	}
 
-	queryQuestion = (category = this.state.category) => {
-    this.props.queryQuestion(category)
+	queryQuestion = (category = this.state.category, paging_sort = DEFAULT_PAGING_SORT) => {
+    	this.props.queryQuestion(category, paging_sort)
 	}
 
 	render() {
-		let dataSource = this.props.question.content || []
+		let data = this.props.question
 		return (
 			<div style={{ margin: '0 auto' }} >
 				<CrudTable
-					dataSource={dataSource}
+					data={data}
 					config={CrudTableConfig}
 				>
 					<AdvancedSearchForm />

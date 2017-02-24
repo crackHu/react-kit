@@ -70,6 +70,21 @@ const getUrlParam = (name) => {
   return null
 }
 
+const urlEncode = (param, key, encode) => {
+  if(param==null) return '';
+  var paramStr = '';
+  var t = typeof (param);
+  if (t == 'string' || t == 'number' || t == 'boolean') {
+    paramStr += '&' + key + '=' + ((encode==null||encode) ? encodeURIComponent(param) : param);
+  } else {
+    for (var i in param) {
+      var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i);
+      paramStr += urlEncode(param[i], k, encode);
+    }
+  }
+  return paramStr;
+};
+
 const emptyObject = (obj) => {
   return obj.constructor === Object && Object.keys(obj).length === 0
 }
@@ -99,5 +114,6 @@ Date.prototype.format = function(format) {
 
 module.exports = {
   post,
-  get
+  get,
+  urlEncode,
 }
