@@ -2,6 +2,7 @@ import React from 'react'
 import { Form, Row, Col, Input, Button, Icon } from 'antd';
 const FormItem = Form.Item;
 import './AdvancedSearchForm.scss'
+import { AdvancedSearchForm as config } from 'routes/Question/CrudTableConfig'
 
 export class AdvancedSearchForm extends React.Component {
   state = {
