@@ -24,7 +24,7 @@ export const queryQuestion = (category, paging_sort) => {
     const failure_cb = (data) => {
       console.log('failure_cb', data)
     }
-    let url = Api.queryQuestion('GET', {category: 'test'}, paging_sort)
+    let url = Api.queryQuestion('GET', {category}, paging_sort)
     get(url, null, correct_cb, failure_cb)
   }
 }

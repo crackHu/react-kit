@@ -1,6 +1,8 @@
 // We only need to import the modules necessary for initial render
 import AntdLayout from '../layouts/AntdLayout'
 import Home from './Home'
+// generate dynamic routes
+import { MENU_ROUTE as routeConfig } from 'config'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -11,10 +13,7 @@ export const createRoutes = (store) => ({
   indexRoute  : Home,
   getChildRoutes: (location, cb) => {
     require.ensure([], (require) => {
-      cb(null, [
-        require('./Counter').default(store),
-        require('./Question').default(store)
-      ])
+      cb(null, genRoutes(store))
     })
   },
   onEnter,
@@ -40,15 +39,19 @@ export const createRoutes = (store) => ({
 */
 
 const onEnter = (nextState, replace, callback) => {
-  console.log('aaaaaaaaaaaaaaaaaa')
   NProgress.start()
   callback()
 }
 
 const onChange = (prevState, nextState, replace, callback) => {
-  console.log('bbbbbbbbbbbbbbbbbbbbbb', NProgress)
   NProgress.start()
   callback()
+}
+
+const genRoutes = (store, { config } = routeConfig) => {
+  return config.map(route => {
+    return require(`./${route.path}/index`).default(store)
+  })
 }
 
 export default createRoutes

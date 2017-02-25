@@ -16,13 +16,13 @@ export class Question extends React.Component {
   }
 
   componentDidMount = () => {
-  	console.log('Question.componentDidMount', this.props, this.state)
+  	console.debug('Question.componentDidMount', this.props, this.state)
 
   	this.queryQuestion()
   }
 
   componentWillReceiveProps = (nextProps) => {
-		console.log('Question.componentWillReceiveProps', this.state.category, nextProps.params)
+		console.debug('Question.componentWillReceiveProps', this.state.category, nextProps.params)
 
 		let category_prev = this.state.category
 		let category_after = nextProps.params.category
@@ -35,24 +35,26 @@ export class Question extends React.Component {
   }
 
 	componentWillUpdate = (nextProps, nextState) => {
-		console.log('Question.componentWillUpdate', nextProps, nextState)
+		console.debug('Question.componentWillUpdate', nextProps, nextState)
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
-		console.log("Question.componentDidUpdate", this.props, prevProps, prevState)
+		console.debug("Question.componentDidUpdate", this.props, prevProps, prevState)
 	}
 
 	queryQuestion = (category = this.state.category, paging_sort = DEFAULT_PAGING_SORT) => {
-    	this.props.queryQuestion(category, paging_sort)
+		console.log('queryQuestion', category, paging_sort)
+    this.props.queryQuestion(category, paging_sort)
 	}
 
 	render() {
-		let data = this.props.question
+		let question = this.props.question
 		return (
 			<div style={{ margin: '0 auto' }} >
 				<CrudTable
-					data={data}
+					data={question}
 					config={CrudTableConfig}
+					getDataSource={this.queryQuestion}
 				>
 					<AdvancedSearchForm />
 				</CrudTable>

@@ -1,7 +1,7 @@
 import { APP, DEFAULT_PAGING_SORT } from 'config'
 import { urlEncode } from 'utils'
 
-const {api} = APP
+const { api } = APP
 
 const ApiUrl = (base, type = 'GET', param, methodName = 'API') => {
 	let url = api.getUrl(base)
@@ -19,7 +19,7 @@ const initParam = (param = {}, paging_sort = DEFAULT_PAGING_SORT) => {
 	// delete paging_sort['pageSize']
 	// delete paging_sort['sortField']
 	// delete paging_sort['sortOrder']
-	Object.assign(param, paging_sort)
+	Object.assign(param, DEFAULT_PAGING_SORT, paging_sort)
 	return param
 }
 

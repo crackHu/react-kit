@@ -7,7 +7,10 @@ export class CrudTable extends React.Component {
   static propTypes = {
     data: React.PropTypes.object.isRequired,
     config: React.PropTypes.object.isRequired,
+
     children: React.PropTypes.element,
+
+    getDataSource: React.PropTypes.func.isRequired,
 
     create: React.PropTypes.func,
     retrieve: React.PropTypes.func,
@@ -16,10 +19,7 @@ export class CrudTable extends React.Component {
 
   };
 
-  static defaultProps = {
-    data: {},
-    sort: 'id,asc',
-  };
+  static defaultProps = {};
 
   constructor(props) {
     console.log('constructor', props)
@@ -39,74 +39,104 @@ export class CrudTable extends React.Component {
   }
 
   componentDidMount = () => {
-    console.log('CrudTable.componentDidMount', this.props, this.state)
+    console.debug('CrudTable.componentDidMount', this.props, this.state)
+
+    this.loading(true)
   }
 
   componentWillReceiveProps = (nextProps) => {
-    console.log('CrudTable.componentWillReceiveProps', nextProps)
+    console.debug('CrudTable.componentWillReceiveProps', nextProps)
+    this.refreshState(nextProps)
   }
 
   componentWillUpdate = (nextProps, nextState) => {
-    console.log('Question.componentWillUpdate', nextProps, nextState)
+    console.debug('CrudTable.componentWillUpdate', nextProps, nextState)
+  }
+
+  refreshState = (props) => {
+    const { data } = props
+
+    this.setState({
+      dataSource: data.content,
+      total: data.totalElements,
+      current: data.number + 1,
+      pageSize: data.size,
+      sort: data.sort,
+      loading: false
+    })
+  }
+
+  loading = (loading = true) => {
+    this.setState({
+      loading
+    })
   }
 
   render() {
+
     const {
-      dataSource
+      dataSource,
+      total,
+      current,
+      pageSize,
+      sort,
+      loading,
+      visible
+    } = this.state
+    const { 
+      children,
+      config,
+      getDataSource
     } = this.props
-    const config = this.props.config.CrudTable
+    const config_ = config.CrudTable
     const {
       columns
-    } = config
-    const pagination = null
-    // {
-    //   current: this.state.pageNo,
-    //   total: this.state.total,
-    //   showSizeChanger: true,
-    //   onShowSizeChange: (pageNo, pageSize) => {
-    //     this.setState({
-    //       pageNo,
-    //       pageSize
-    //     }, () => {
-    //       this.getDataSource(pageNo, pageSize)
-    //     })
-    //     console.log('PageNo: ', pageNo, '; PageSize: ', pageSize);
-    //     this.genSerialNumber(true, pageNo, pageSize)
-    //   },
-    //   onChange: (pageNo) => {
-    //     console.log('onChange', this.state)
-    //     const pageSize = this.state.pageSize
-    //     this.setState({
-    //       pageNo,
-    //     }, () => {
-    //       this.getDataSource(pageNo, pageSize)
-    //       console.log('PageNo: ', pageNo, this.state);
-    //     })
-    //     this.genSerialNumber(true, pageNo, pageSize)
-    //   },
-    //   showQuickJumper: true,
-    //   pageSize: this.state.pageSize,
-    //   showTotal: (total, range) => `共 ${total} 条 （${range[0]}-${range[1]}）`
-    // }
+    } = config_
+    const pagination = {
+      current,
+      total,
+      showSizeChanger: true,
+      onShowSizeChange: (current, pageSize) => {
+        console.log('onShowSizeChange ', 'Current: ', current, '; PageSize: ', pageSize);
+        this.setState({
+          loading: true
+        }, () => {
+          getDataSource('test1', {current, pageSize})
+        })
+        
+      },
+      onChange: (current) => {
+        console.log('onChange', current)
+        this.setState({
+          loading: true
+        }, () => {
+          getDataSource('test2', {current, pageSize})
+        })
+      },
+      showQuickJumper: true,
+      pageSize,
+      showTotal: (total, range) => `共 ${total} 条 （${range[0]}-${range[1]}）`
+    }
 
     return (
       <div>
-            {this.props.children}
-            <Table
-                rowKey={record => record.id}
-                dataSource={dataSource}
-                columns={columns}
-                pagination={pagination}
-                expandedRowRender={record => {
-                    return(
-                      <div>
-                        <b>描述：</b><p>{record.scheme}</p>
-                        <b>开发实施方案：</b><p>{record.description}</p>
-                      </div>
-                    )
-                }}
-            />
-          </div>
+        {children}
+        <Table
+            rowKey={record => record.id}
+            dataSource={dataSource}
+            columns={columns}
+            pagination={pagination}
+            loading={loading}
+            expandedRowRender={record => {
+                return(
+                  <div>
+                    <b>描述：</b><p>{record.scheme}</p>
+                    <b>开发实施方案：</b><p>{record.description}</p>
+                  </div>
+                )
+            }}
+        />
+      </div>
     )
   }
 }
