@@ -62,7 +62,7 @@ export class CrudTable extends React.Component {
       current: data.number + 1,
       pageSize: data.size,
       sort: data.sort,
-      loading: props.data ? true : false 
+      loading: props.data.content ? false : true
     })
   }
 
