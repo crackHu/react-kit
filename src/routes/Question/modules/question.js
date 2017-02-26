@@ -9,23 +9,15 @@ export const QUESTION = 'QUESTION'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const queryQuestion = (category, paging_sort) => {
+export const queryQuestion = (category, param, paging_sort) => {
   return (dispatch, getState) => {
-    const correct_cb = (data) => {
-      console.log('correct_cb', category, data)
+    let url = Api.queryQuestion('GET', {...param, category}, paging_sort)
+    get(url).then(data => {
       dispatch({
         type: QUESTION,
-        data: {
-          ...data,
-          category
-        }
+        data: { ...data, category }
       })
-    }
-    const failure_cb = (data) => {
-      console.log('failure_cb', data)
-    }
-    let url = Api.queryQuestion('GET', {category}, paging_sort)
-    get(url, null, correct_cb, failure_cb)
+    })
   }
 }
 
@@ -37,7 +29,7 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [QUESTION]    : (state, action) => action.data,
+  [QUESTION]    : (state, action) => action.data
 }
 
 // ------------------------------------

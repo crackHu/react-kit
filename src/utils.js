@@ -1,7 +1,7 @@
 import 'whatwg-fetch'
 import { DATE_PATTERN } from 'config'
 
-const post = async (url, param = null, correct_cb, failure_cb) => {
+const post = async (url, param = null) => {
   // JSON.stringify(param)
   let options = {
     method: "POST",
@@ -11,10 +11,10 @@ const post = async (url, param = null, correct_cb, failure_cb) => {
       "Content-Type": "application/json"
     }
   }
-  return await get(url, options, correct_cb, failure_cb)
+  return await get(url, options)
 }
 
-const get = async (url, options = null, correct_cb, failure_cb) => {
+const get = async (url, options = null) => {
   // fetch(url, options)
   //   .then(response => response.json())
   //   .then(response => {
@@ -25,31 +25,29 @@ const get = async (url, options = null, correct_cb, failure_cb) => {
   try {
     let response = await fetch(url, options)
     let data = await response.json()
-    console.log('get', data)
-    return requestFilter(data, correct_cb, failure_cb)
+    return requestFilter(data)
   } catch (e) {
     logger(e, 'error')
   }
 }
 
-const requestFilter = (response, correct_cb, failure_cb) => {
+const requestFilter = (response) => {
   console.debug('requestFilter =>', response)
-
   let { code, message, data, status} = response
-  if (code) {
-    if (code === '1001') {
-      typeof correct_cb === 'function' ? correct_cb(data) : null
-      return data
-    } else {
-      typeof failure_cb === 'function' ? failure_cb(data) : null
-      logger(response, message)
-      return
+  return new Promise((resolve, reject) => {
+    if (code) {
+      if (code === '1001') {
+        resolve(data)
+      } else {
+        reject(data)
+        logger(response, message)
+      }
     }
-  }
-  if (status) {
-    typeof failure_cb === 'function' ? failure_cb(data) : null
-    logger(response, 'error')
-  }
+    if (status) {
+      reject(status)
+      logger(response, 'error')
+    }
+  })
 }
 
 const logger = (object, type = 'debug', alerted = false) => {
@@ -115,5 +113,5 @@ Date.prototype.format = function(format) {
 module.exports = {
   post,
   get,
-  urlEncode,
+  urlEncode
 }

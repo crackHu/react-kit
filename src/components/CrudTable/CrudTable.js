@@ -1,17 +1,17 @@
 import React from 'react'
 import { Table } from 'antd'
-import { DEFAULT_PAGING_SORT } from 'config'
+import { AdvancedSearchForm as adSearchFormConfig, DEFAULT_PAGING_SORT } from 'config'
 
 export class CrudTable extends React.Component {
 
   static propTypes = {
     data: React.PropTypes.object.isRequired,
     config: React.PropTypes.object.isRequired,
+    getDataSource: React.PropTypes.func.isRequired,
+    advancedSearch: React.PropTypes.string,
+
 
     children: React.PropTypes.element,
-
-    getDataSource: React.PropTypes.func.isRequired,
-
     create: React.PropTypes.func,
     retrieve: React.PropTypes.func,
     update: React.PropTypes.func,
@@ -45,7 +45,7 @@ export class CrudTable extends React.Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    console.debug('CrudTable.componentWillReceiveProps', nextProps)
+    console.debug('CrudTable.componentWillReceiveProps', nextProps, this.props)
     this.refreshState(nextProps)
   }
 
@@ -54,15 +54,15 @@ export class CrudTable extends React.Component {
   }
 
   refreshState = (props) => {
-    const { data } = props
-
+    const { data, params } = props
+    const loading = params.category === this.props.params.category ? false : true
     this.setState({
       dataSource: data.content,
       total: data.totalElements,
       current: data.number + 1,
       pageSize: data.size,
       sort: data.sort,
-      loading: props.data.content ? false : true
+      loading: data.content ? loading : true
     })
   }
 
@@ -71,6 +71,14 @@ export class CrudTable extends React.Component {
       loading
     })
   }
+
+  handleSearch = (values) => {
+    console.log('Table Received values of form: ', values);
+    const name = values.name
+    this.loading()
+    this.props.getDataSource('byname', {name})
+  }
+
 
   render() {
 
@@ -84,9 +92,10 @@ export class CrudTable extends React.Component {
       visible
     } = this.state
     const { 
-      children,
+      advancedSearch,
       config,
-      getDataSource
+      getDataSource,
+      params
     } = this.props
     const config_ = config.CrudTable
     const {
@@ -117,10 +126,16 @@ export class CrudTable extends React.Component {
       pageSize,
       showTotal: (total, range) => `共 ${total} 条 （${range[0]}-${range[1]}）`
     }
+    const AdvancedSearchForm = advancedSearch ? require(`../${advancedSearch}/index`).default : null
 
     return (
       <div>
-        {children}
+        {AdvancedSearchForm && params.category !== 'unfinished' ? 
+          <AdvancedSearchForm
+           config={adSearchFormConfig}
+           handleSearch={this.handleSearch}
+          />
+         : null}
         <Table
             rowKey={record => record.id}
             dataSource={dataSource}

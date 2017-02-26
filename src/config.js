@@ -21,7 +21,7 @@ const MENU_ROUTE = {
 		key: 'Question',
 		path: 'Question',
 		iconType: 'user',
-		content: 'User',
+		content: '问题',
 		className: 'nav-text',
 		children: [{
 			key: 'company',
@@ -39,17 +39,17 @@ const MENU_ROUTE = {
 			key: 'unfinished',
 			link: '/question/unfinished',
 			iconType: 'user',
-			content: '未完成的问题列表',
+			content: '7天内未完成的问题列表',
 			className: 'nav-text',
 		}]
-	}, {
+	}/*, {
 		key: 'Counter',
 		path: 'Counter',
 		link: '/counter',
 		iconType: 'user',
 		content: 'Counter',
 		className: '',
-	}]
+	}*/]
 }
 module.exports = {
   DATE_PATTERN,

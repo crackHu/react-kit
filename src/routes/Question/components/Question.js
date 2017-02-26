@@ -4,6 +4,7 @@ import CrudTable from 'components/CrudTable'
 import CrudTableConfig from '../CrudTableConfig'
 import AdvancedSearchForm from 'components/AdvancedSearchForm'
 import { DEFAULT_PAGING_SORT } from 'config'
+import { queryEmployee } from 'fetch'
 
 export class Question extends React.Component {
 
@@ -19,6 +20,7 @@ export class Question extends React.Component {
   	console.debug('Question.componentDidMount', this.props, this.state)
 
   	this.queryQuestion()
+  	this.queryEmployee()
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -42,9 +44,21 @@ export class Question extends React.Component {
 		console.debug("Question.componentDidUpdate", this.props, prevProps, prevState)
 	}
 
-	queryQuestion = (category = this.state.category, paging_sort = DEFAULT_PAGING_SORT) => {
-		console.log('queryQuestion', category, paging_sort)
-    this.props.queryQuestion(category, paging_sort)
+	queryQuestion = (category = this.state.category, param, paging_sort) => {
+		console.debug('queryQuestion', category, paging_sort)
+    this.props.queryQuestion(category, param, paging_sort)
+	}
+
+	queryEmployee = () => {
+		if (!('employee' in sessionStorage)) {
+			queryEmployee().then(data => {
+				const employees = []
+				data.map(employee => {
+					employees.push({ value: employee.incha })
+				})
+				sessionStorage.employee = JSON.stringify(employees)
+			})
+		}
 	}
 
 	render() {
@@ -55,8 +69,9 @@ export class Question extends React.Component {
 					data={question}
 					config={CrudTableConfig}
 					getDataSource={this.queryQuestion}
+					advancedSearch={'AdvancedSearchForm'}
+					params={this.props.params}
 				>
-					<AdvancedSearchForm />
 				</CrudTable>
       </div>
 		)

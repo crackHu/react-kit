@@ -1,3 +1,5 @@
+const DATE_PATTERN = 'YYYY-MM-DD HH:mm:ss'
+
 const CrudTable = {
 	columns: [{
 		title: '#',
@@ -33,23 +35,27 @@ const CrudTable = {
 const AdvancedSearchForm = {
 	formItemLayout: {
 		labelCol: {
-			span: 5
+			span: 6
 		},
 		wrapperCol: {
-			span: 19
+			span: 18
 		},
 	},
 	item: [{
+		label: '员工姓名',
+		name: 'name',
+		type: 'select',
+		options: JSON.parse(sessionStorage.employee),
+		config: {
+			placeholder: '请选择员工姓名',
+		}
+	}, {
 		label: '短信用户名称',
 		name: 'smsCpName',
 		required: true,
 		message: '不能为空',
 		type: 'input',
-		showIn: {
-			CREATE: true,
-			UPDATE: true,
-			QUERY: true
-		},
+		hidden: true,
 		config: {
 			placeholder: '请输入短信用户名称',
 		}
@@ -58,12 +64,13 @@ const AdvancedSearchForm = {
 		name: 'smsCpAppKey',
 		required: true,
 		message: '不能为空',
-		type: 'input',
-		showIn: {
-			CREATE: true,
-			UPDATE: true,
-			QUERY: true
-		},
+		type: 'select',
+		hidden: true,
+		options: [{
+			value: '111',
+		}, {
+			value: '222'
+		}],
 		config: {
 			placeholder: '请输入短信用户appkey',
 		}
@@ -73,11 +80,7 @@ const AdvancedSearchForm = {
 		type: 'input',
 		required: true,
 		message: '不能为空',
-		showIn: {
-			CREATE: true,
-			UPDATE: true,
-			QUERY: true
-		},
+		hidden: true,
 		config: {
 			placeholder: '请输入短信用户secret',
 		}
@@ -85,14 +88,10 @@ const AdvancedSearchForm = {
 		label: '创建时间',
 		name: 'smsCreateTime',
 		type: 'datepicker',
-		format: 'DATE_FORMAT_STRING',
+		format: DATE_PATTERN,
 		required: true,
 		message: '不能为空',
-		showIn: {
-			CREATE: false,
-			UPDATE: false,
-			QUERY: true
-		},
+		hidden: true,
 		config: {
 			showTime: true,
 			style: {
@@ -104,14 +103,10 @@ const AdvancedSearchForm = {
 		label: '修改时间',
 		name: 'smsModifyTime',
 		type: 'datepicker',
-		format: 'DATE_FORMAT_STRING',
+		format: DATE_PATTERN,
 		required: true,
 		message: '不能为空',
-		showIn: {
-			CREATE: false,
-			UPDATE: false,
-			QUERY: true
-		},
+		hidden: true,
 		config: {
 			showTime: true,
 			style: {

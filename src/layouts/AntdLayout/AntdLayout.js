@@ -120,7 +120,6 @@ export class AntdLayout extends React.Component {
     )
   }
 
-
   render () {
     return (
       <Layout id='components-layout-demo-custom-trigger'>
