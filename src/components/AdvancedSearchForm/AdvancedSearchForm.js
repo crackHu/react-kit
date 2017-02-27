@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Row, Col, Input, Button, Icon, Select, Radio, Cascader, DatePicker } from 'antd';
+import { Spin, Form, Row, Col, Input, Button, Icon, Select, Radio, Cascader, DatePicker } from 'antd';
 import './AdvancedSearchForm.scss'
 import { AdvancedSearchForm as config } from 'routes/Question/CrudTableConfig'
 
@@ -17,8 +17,12 @@ export class AdvancedSearchForm extends React.Component {
   };
 
   state = {
-    expand: false,
+    expand: false
   };
+
+  componentDidUpdate = () => {
+    console.log('AdvancedSearchForm.componentDidUpdate')
+  }
 
   handleSearch = (e) => {
     e.preventDefault();
@@ -38,9 +42,9 @@ export class AdvancedSearchForm extends React.Component {
   }
 
   genSelectOptions = (data) => {
-      return data.map((item, i) => {
-          return <Option key={item.value}>{item.value}</Option>
-      })
+    return data.map((item, i) => {
+        return <Option key={item.value}>{item.value}</Option>
+    })
   }
 
   genForm = (formConfig = config) => {
@@ -49,57 +53,63 @@ export class AdvancedSearchForm extends React.Component {
     const children = []
     item.map((item, i) => {
       const {
-          required,
-          message,
-          type,
-          config,
-          options,
-          hidden
+        required,
+        message,
+        type,
+        config,
+        hidden,
+        options,
+        optionSessionStorageProperty,
+        name,
+        label
       } = item
+      if (hidden === true) return
+
       /*rules option*/
       let option
       if (required) {
-          option = {
-              rules: [{
-                  required,
-                  message
-              }]
-          }
+          option = { rules: [{ required, message }] }
       }
       let component
       switch (type) {
-          case 'input':
-              component = <Input {...config} />
-              break
-          case 'select':
-              component = (
-                  <Select {...config}>
-                      {options ? this.genSelectOptions(options) : null}
-                  </Select>
-              )
-              break
-          case 'datepicker':
-              let { format } = item
-              component = <DatePicker {...config} format={format}/>
-              break
-          case 'cascader':
-              component = <Cascader {...config} options={options}/>
-              break
-          default:
-              component = <Input {...config} />
-              break
+        case 'input':
+          component = <Input {...config} />
+          break
+        case 'select':
+          const sSoptions = sessionStorage[optionSessionStorageProperty]
+          try {
+            // options = options ? options : JSON.parse(sSoptions || '[]')
+            component = (
+                <Select {...config}>
+                    {options ? this.genSelectOptions(options) : null}
+                </Select>
+            )
+          } catch (e) {
+            console.error(e, `${name}[${label}] 组件初始化失败`, optionSessionStorageProperty)
+          }
+          break
+        case 'datepicker':
+          let { format } = item
+          component = <DatePicker {...config} format={format}/>
+          break
+        case 'cascader':
+          component = <Cascader {...config} options={options}/>
+          break
+        default:
+          component = <Input {...config} />
+          break
       }
-      if (hidden !== true) {
-        children.push(
-          <Col span={8} key={i}>
-            <FormItem {...formItemLayout} key={i} label={item.label}>
-              {getFieldDecorator(item.name, option)(
-                component
-              )}
-            </FormItem>
-          </Col>
-        )
-      }
+      if (!component) return
+
+      children.push(
+        <Col span={8} key={i}>
+          <FormItem {...formItemLayout} key={i} label={label}>
+            {getFieldDecorator(name, option)(
+              component
+            )}
+          </FormItem>
+        </Col>
+      )
     })
     return children
   }
@@ -128,6 +138,7 @@ export class AdvancedSearchForm extends React.Component {
 
     const expand = this.state.expand;
     const shownCount = expand ? children.length : 3;
+    
     return children.length !== 0 ? (
       <div id="components-form-demo-advanced-search">
         <Form
@@ -143,9 +154,11 @@ export class AdvancedSearchForm extends React.Component {
               <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
                 清空
               </Button>
-              <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
-                Collapse <Icon type={expand ? 'up' : 'down'} />
-              </a>
+              {children.length > 3 ? (
+                <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
+                  Collapse <Icon type={expand ? 'up' : 'down'} />
+                </a>
+              ): null}
             </Col>
           </Row>
         </Form>

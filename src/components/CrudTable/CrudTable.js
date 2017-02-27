@@ -75,8 +75,13 @@ export class CrudTable extends React.Component {
   handleSearch = (values) => {
     console.log('Table Received values of form: ', values);
     const name = values.name
+    const status = values.status
+    let code = 0
+    if (status) {
+      code = status === '未完成' ? 0 : 1
+    }
     this.loading()
-    this.props.getDataSource('byname', {name})
+    this.props.getDataSource('byname', {name, status: code})
   }
 
 
@@ -110,7 +115,7 @@ export class CrudTable extends React.Component {
         this.setState({
           loading: true
         }, () => {
-          getDataSource('test1', {current, pageSize})
+          getDataSource('test1', {}, {current, pageSize})
         })
         
       },
@@ -119,7 +124,7 @@ export class CrudTable extends React.Component {
         this.setState({
           loading: true
         }, () => {
-          getDataSource('test2', {current, pageSize})
+          getDataSource('test2', {}, {current, pageSize})
         })
       },
       showQuickJumper: true,

@@ -6,6 +6,7 @@ const RM_PREFIX = '/admin/rm/'
 
 const ApiUrl = (base, type = 'GET', param, methodName = 'API') => {
 	let url = api.getUrl(base)
+	// let url = '/rmMgr' + base
 	console.debug(`${methodName}[${type}] => URL: ${url} PARAM: ${JSON.stringify(param)}`)
 	return type === 'GET' ? `${url}?${urlEncode(param)}` : { url, param }
 }
@@ -16,7 +17,7 @@ const initParam = (param = {}, paging_sort = DEFAULT_PAGING_SORT) => {
 	paging_sort['page'] = page || page === 0 ? page : current - 1
 	paging_sort['size'] = size || size === 0 ? size : pageSize
 	paging_sort['sort'] = sort || `${sortField},${sortOrder}`
-
+	console.debug(`initParam => form`, param, paging_sort)
 	delete paging_sort['current']
 	delete paging_sort['pageSize']
 	delete paging_sort['sortField']

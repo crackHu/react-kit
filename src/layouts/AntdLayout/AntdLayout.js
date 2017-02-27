@@ -63,8 +63,8 @@ export class AntdLayout extends React.Component {
 
   genMenu = (menu_config = menuConfig) => {
     const {
-      defaultOpenKeys,
-      defaultSelectedKeys,
+      defaultOpenKey,
+      defaultSelectedKey,
       config
     } = menu_config
     const {pathname} = this.props.location
@@ -103,7 +103,7 @@ export class AntdLayout extends React.Component {
 
     this.setState({
       menuKeys,
-      openKey,
+      openKey : openKey ? openKey : defaultOpenKey,
       selectedKey
     })
     return menu
@@ -182,7 +182,7 @@ export class AntdLayout extends React.Component {
             {this.props.children}
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            DingMedic ©2017 rmMgr
+            DingMedic ©2017 RMMGR
           </Footer>
         </Layout>
       </Layout>

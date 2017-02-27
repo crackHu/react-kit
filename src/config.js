@@ -10,13 +10,13 @@ const APP = {
 }
 const DEFAULT_PAGING_SORT = {
 	current: 1,
-	pageSize: 10,
+	pageSize: 20,
 	sortField: 'id',
 	sortOrder: 'asc'
 }
 const MENU_ROUTE = {
-	defaultOpenKeys: ['Question'],
-	defaultSelectedKeys: ['company'],
+	defaultOpenKey: 'Question',
+	defaultSelectedKey: 'company',
 	config: [{
 		key: 'Question',
 		path: 'Question',
