@@ -5,14 +5,17 @@ const CrudTable = {
 		title: '#',
 		dataIndex: 'id',
 		key: 'id',
+		sorter: true
 	}, {
 		title: '状态',
 		dataIndex: 'status',
 		key: 'status',
+		sorter: true
 	}, {
 		title: '项目',
 		dataIndex: 'prjName',
 		key: 'prjName',
+		sorter: true
 	}, {
 		title: '主题',
 		dataIndex: 'subject',
@@ -25,10 +28,12 @@ const CrudTable = {
 		title: '负责人',
 		dataIndex: 'incha',
 		key: 'incha',
+		sorter: true
 	},  {
 		title: '指派给',
 		dataIndex: 'asign',
 		key: 'asign',
+		sorter: true
 	}]
 }
 

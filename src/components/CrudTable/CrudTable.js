@@ -33,9 +33,10 @@ export class CrudTable extends React.Component {
     current: this.props.data.number,
     pageSize: this.props.data.size,
     sort: this.props.data.sort,
+    condition: {},
 
     loading: false,
-    visible: false,
+    expandedRowKeys: []
   }
 
   componentDidMount = () => {
@@ -61,8 +62,8 @@ export class CrudTable extends React.Component {
       total: data.totalElements,
       current: data.number + 1,
       pageSize: data.size,
-      sort: data.sort,
-      loading: data.content ? loading : true
+      sort: data.sort || 'id desc',
+      loading: data.content ? loading : true,
     })
   }
 
@@ -73,15 +74,42 @@ export class CrudTable extends React.Component {
   }
 
   handleSearch = (values) => {
-    console.log('Table Received values of form: ', values);
-    const name = values.name
-    const status = values.status
-    let code = 0
+    console.log('Table Received values of form: ', values, this.state);
+   
+    const { name, status } = values
+    const { current, pageSize, sort = 'id desc' } = this.state
+    let code = undefined
     if (status) {
       code = status === '未完成' ? 0 : 1
     }
     this.loading()
-    this.props.getDataSource('byname', {name, status: code})
+    const condition = {name, status: code}
+    this.setState({
+      condition
+    }, () => {
+      this.props.getDataSource('employee', condition, { current, pageSize, sort })
+    })
+  }
+
+  resetFields = () => {
+    this.setState({
+      condition: {}
+    })
+  }
+
+  handleChange = (pagination, filters, sorter) => {
+    console.log('Various parameters', pagination, filters, sorter, this.state, this.props);
+    const { current, pageSize } = pagination
+    const { field = 'id', order = 'asc' } = sorter
+    const { params } = this.props
+    const sort = `${field} ${order === 'descend' ? 'desc' : 'asc'}`
+    this.setState({
+      loading: true,
+      sort,
+    }, () => {
+      const { condition } = this.state
+      this.props.getDataSource(params.category, condition, {current, pageSize, sort})
+    });
   }
 
 
@@ -94,7 +122,8 @@ export class CrudTable extends React.Component {
       pageSize,
       sort,
       loading,
-      visible
+      expandedRowKeys,
+      condition
     } = this.state
     const { 
       advancedSearch,
@@ -112,20 +141,20 @@ export class CrudTable extends React.Component {
       showSizeChanger: true,
       onShowSizeChange: (current, pageSize) => {
         console.log('onShowSizeChange ', 'Current: ', current, '; PageSize: ', pageSize);
-        this.setState({
-          loading: true
-        }, () => {
-          getDataSource('test1', {}, {current, pageSize})
-        })
+        // this.setState({
+        //   loading: true
+        // }, () => {
+        //   getDataSource('test1', condition, { current, pageSize, sort: sort || 'id asc' })
+        // })
         
       },
       onChange: (current) => {
         console.log('onChange', current)
-        this.setState({
-          loading: true
-        }, () => {
-          getDataSource('test2', {}, {current, pageSize})
-        })
+        // this.setState({
+        //   loading: true
+        // }, () => {
+        //   getDataSource('test2', condition, { current, pageSize, sort: sort || 'id asc' })
+        // })
       },
       showQuickJumper: true,
       pageSize,
@@ -135,10 +164,11 @@ export class CrudTable extends React.Component {
 
     return (
       <div>
-        {AdvancedSearchForm && params.category !== 'unfinished' ? 
+        {AdvancedSearchForm && params.category === 'employee'  ? 
           <AdvancedSearchForm
            config={adSearchFormConfig}
            handleSearch={this.handleSearch}
+           resetFields={this.resetFields}
           />
          : null}
         <Table
@@ -147,6 +177,11 @@ export class CrudTable extends React.Component {
             columns={columns}
             pagination={pagination}
             loading={loading}
+            expandedRowKeys={expandedRowKeys}
+            onChange={this.handleChange}
+            onRowClick={(record, index) => {
+              this.setState({ expandedRowKeys: expandedRowKeys && expandedRowKeys[0] === record.id ? [] : [record.id] })
+            }}
             expandedRowRender={record => {
                 return(
                   <div>

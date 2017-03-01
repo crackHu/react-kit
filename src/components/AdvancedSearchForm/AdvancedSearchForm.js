@@ -9,7 +9,8 @@ const Option = Select.Option
 export class AdvancedSearchForm extends React.Component {
   static propTypes = {
     config: React.PropTypes.object,
-    handleSearch: React.PropTypes.func.isRequired
+    handleSearch: React.PropTypes.func.isRequired,
+    resetFields: React.PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -34,6 +35,7 @@ export class AdvancedSearchForm extends React.Component {
 
   handleReset = () => {
     this.props.form.resetFields();
+    this.props.resetFields()
   }
 
   toggle = () => {

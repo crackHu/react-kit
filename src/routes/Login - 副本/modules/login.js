@@ -4,12 +4,12 @@ import * as Api from 'api'
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const QUESTION = 'QUESTION'
+export const LOGIN = 'LOGIN'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const queryQuestion = (category, param, paging_sort) => {
+export const login = (category, param, paging_sort) => {
   return (dispatch, getState) => {
     let url = Api.queryQuestion('GET', {...param, category}, paging_sort)
     get(url).then(data => {
@@ -22,22 +22,22 @@ export const queryQuestion = (category, param, paging_sort) => {
 }
 
 export const actions = {
-  queryQuestion
+  login
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [QUESTION]    : (state, action) => action.data
+  [LOGIN]    : (state, action) => action.data
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 const initialState = {}
-export default function questionReducer (state = initialState, action) {
-  console.log('questionReducer ->', state, action)
+export default function loginReducer (state = initialState, action) {
+  console.log('loginReducer ->', state, action)
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state

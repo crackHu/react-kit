@@ -14,7 +14,7 @@ const post = async (url, param = null) => {
   return await get(url, options)
 }
 
-const get = async (url, options = null) => {
+const get = async (url, options = { /*credentials: "include"*/ }) => {
   // fetch(url, options)
   //   .then(response => response.json())
   //   .then(response => {
@@ -38,13 +38,15 @@ const requestFilter = (response) => {
     if (code) {
       if (code === '1001') {
         resolve(data)
+      } else if (code === '0000') {
+        location.href = '/login'
       } else {
-        reject(data)
-        logger(response, message)
+        reject(response)
+        logger(response, 'warn', message)
       }
     }
     if (status) {
-      reject(status)
+      reject(response)
       logger(response, 'error')
     }
   })
@@ -110,8 +112,23 @@ Date.prototype.format = function(format) {
   return format;
 }
 
+// ------ 设置 Cookie ------ //
+const setCookie = (c_name, value, expiredays = 7) => {
+    var exdate = new Date()
+    exdate.setDate(exdate.getDate() + expiredays)
+    document.cookie = c_name + "=" + escape(value) + ";expires=" + exdate.toGMTString()
+}
+
+// ------ 获取 Cookie ------ //
+const getCookie =(name) => {
+    var reg = eval("/(?:^|;\\s*)" + name + "=([^=]+)(?:;|$)/");
+    return reg.test(document.cookie) ? RegExp.$1 : "";
+}
+
 module.exports = {
   post,
   get,
-  urlEncode
+  urlEncode,
+  setCookie,
+  getCookie
 }

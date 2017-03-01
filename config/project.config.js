@@ -32,14 +32,14 @@ const config = {
   // ----------------------------------
   compiler_babel : {
     cacheDirectory : true,
-    plugins        : ['transform-runtime', 'transform-decorators-legacy', ['import', [{ libraryName: 'antd', style: true }, { libraryName: 'material-ui', 'libraryDirectory': '' }]]],
+    plugins        : ['transform-runtime', 'transform-decorators-legacy', ['import', [{ libraryName: 'antd', style: true }]]],
     presets        : ['es2015', 'react', 'stage-0']
   },
   compiler_devtool         : 'source-map',
   compiler_hash_type       : 'hash',
   compiler_fail_on_warning : false,
   compiler_quiet           : false,
-  compiler_public_path     : '/',
+  compiler_public_path     : '/redmine/',
   compiler_stats           : {
     chunks : false,
     chunkModules : false,

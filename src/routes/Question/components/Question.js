@@ -46,7 +46,7 @@ export class Question extends React.Component {
 
 	queryQuestion = (category = this.state.category, param, paging_sort) => {
 		console.debug('queryQuestion', category, paging_sort)
-    this.props.queryQuestion(category, param, paging_sort)
+  	this.props.queryQuestion(category, param, paging_sort)
 	}
 
 	queryEmployee = () => {

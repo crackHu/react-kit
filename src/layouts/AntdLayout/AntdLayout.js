@@ -182,7 +182,7 @@ export class AntdLayout extends React.Component {
             {this.props.children}
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            DingMedic ©2017 RMMGR
+            DingMedic ©2017 redmine
           </Footer>
         </Layout>
       </Layout>

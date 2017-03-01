@@ -12,7 +12,7 @@ const DEFAULT_PAGING_SORT = {
 	current: 1,
 	pageSize: 20,
 	sortField: 'id',
-	sortOrder: 'asc'
+	sortOrder: 'desc'
 }
 const MENU_ROUTE = {
 	defaultOpenKey: 'Question',
@@ -51,9 +51,16 @@ const MENU_ROUTE = {
 		className: '',
 	}*/]
 }
+const INDEPEND_ROUTE = {
+	config: [{
+		path: 'Login',
+		link: '/login',
+	}]
+}
 module.exports = {
   DATE_PATTERN,
   APP,
   DEFAULT_PAGING_SORT,
   MENU_ROUTE,
+  INDEPEND_ROUTE
 }
