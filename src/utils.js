@@ -39,7 +39,7 @@ const requestFilter = (response) => {
       if (code === '1001') {
         resolve(data)
       } else if (code === '0000') {
-        location.href = '/login'
+        location.href = __DEV__ ? '/login' : `${__BASENAME__}/#/login`
       } else {
         reject(response)
         logger(response, 'warn', message)

@@ -1,10 +1,18 @@
 import React, { Component, PropTypes } from 'react'
-import { browserHistory, Router } from 'react-router'
+import { useRouterHistory, browserHistory, Router } from 'react-router'
+import createHashHistory from 'history/lib/createHashHistory'
+import createBrowserHistory from 'history/lib/createBrowserHistory'
 import { Provider } from 'react-redux'
 
 // Global css
 // cdn import 'nprogress/nprogress.css'
 
+const appHistory = __DEV__ ? useRouterHistory(createBrowserHistory)({
+  basename: __BASENAME__
+}) : useRouterHistory(createHashHistory)({
+  queryKey: false
+})
+console.log('asdfasdf', appHistory, __BASENAME__)
 class AppContainer extends Component {
   static propTypes = {
     // routes : PropTypes.object.isRequired,
@@ -22,7 +30,7 @@ class AppContainer extends Component {
     return (
       <Provider store={store}>
         <div style={{ height: '100%' }}>
-          <Router history={browserHistory} children={routes} />
+          <Router history={appHistory} children={routes} />
         </div>
       </Provider>
     )
