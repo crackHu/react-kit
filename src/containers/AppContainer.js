@@ -12,7 +12,7 @@ const appHistory = __DEV__ ? useRouterHistory(createBrowserHistory)({
 }) : useRouterHistory(createHashHistory)({
   queryKey: false
 })
-console.log('asdfasdf', appHistory, __BASENAME__)
+
 class AppContainer extends Component {
   static propTypes = {
     // routes : PropTypes.object.isRequired,

@@ -12,9 +12,7 @@ class NormalLoginForm extends React.Component {
 		router: React.PropTypes.object.isRequired
 	}
 
-	state = {
-		loading: false
-	}
+	state = { loading: false }
 
   handleSubmit = (e) => {
   	this.loading()
@@ -31,7 +29,8 @@ class NormalLoginForm extends React.Component {
   loading = (loading = true) => {
     this.setState({
       loading
-    })
+    }, () => console.log('asdfasd', loading, this.state))
+    debugger
   }
 
   login = (params) => {
